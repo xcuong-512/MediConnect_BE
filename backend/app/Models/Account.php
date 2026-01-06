@@ -25,4 +25,9 @@ class Account extends Authenticatable
     {
         return $this->belongsToMany(Role::class, 'account_roles');
     }
+
+    public function person()
+    {
+        return $this->hasOne(Person::class);
+    }
 }

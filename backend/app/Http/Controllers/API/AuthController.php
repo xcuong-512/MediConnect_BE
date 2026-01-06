@@ -17,35 +17,35 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email|unique:accounts',
-            'password' => 'required|min:6',
-            'full_name' => 'required',
             'password' => 'required|min:6|confirmed',
+            'full_name' => 'required',
+            'phone' => 'nullable|string',
         ]);
 
-        // create new account
         $account = Account::create([
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
 
-        // role patient
         $role = Role::where('name', 'patient')->first();
-        $account->roles()->attach($role->id);
+        if ($role) {
+            $account->roles()->attach($role->id);
+        }
 
-        // create people
         $person = Person::create([
+            'account_id' => $account->id,
             'full_name' => $request->full_name,
             'phone' => $request->phone,
         ]);
 
-        // create patient
         Patient::create([
             'person_id' => $person->id,
             'medical_code' => 'MC-' . time()
         ]);
 
         return response()->json([
-            'message' => 'Đăng ký thành công'
+            'message' => 'Đăng ký thành công',
+            'user' => $account->load('person', 'roles')
         ], 201);
     }
 

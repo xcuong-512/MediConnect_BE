@@ -8,8 +8,11 @@ class Patient extends Model
 {
     protected $fillable = [
         'person_id',
-        'medical_code',
-        'blood_type',
-        'emergency_contact'
+        'medical_code'
     ];
+
+    public function person()
+    {
+        return $this->belongsTo(Person::class);
+    }
 }

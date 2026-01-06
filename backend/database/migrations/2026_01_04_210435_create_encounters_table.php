@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('encounters', function (Blueprint $table) {
             $table->id();
             $table->foreignId('appointment_id')->constrained('appointments')->cascadeOnDelete();
-            $table->foreignId('room_id')->constrained('rooms')->cascadeOnDelete();
+            $table->foreignId('room_id')->nullable()->constrained('rooms')->cascadeOnDelete();
             $table->dateTime('started_at')->nullable();
             $table->dateTime('ended_at')->nullable();
             $table->timestamps();
